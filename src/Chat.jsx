@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useState, useEffect, useRef } from 'react';
 import { OpenAI } from 'openai';
 import './Chat.css'
 
@@ -9,7 +9,9 @@ const Chat = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
 
-   
+  const messagesEndRef = useRef(null);
+
+  
   const openai = new OpenAI({
     apiKey: import.meta.env.VITE_OPENAI_API_KEY, 
     dangerouslyAllowBrowser: true, 
@@ -54,6 +56,12 @@ const Chat = () => {
     }
   };
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   return (
     <div className="chat-box">
       <div className="messages">
@@ -67,6 +75,7 @@ const Chat = () => {
             {message.content}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="input-container">
         <input

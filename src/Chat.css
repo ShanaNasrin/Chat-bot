@@ -30,7 +30,6 @@ body {
 
 .message {
     padding: 10px;
-    border-radius: 15px;
     max-width: 70%;
     word-wrap: break-word;
 }
@@ -39,12 +38,14 @@ body {
     background-color: #3897f0;
     color: #ffffff;
     align-self: flex-end;
+    border-radius: 20px 20px 0px 20px;
 }
 
 .chatgpt-message {
     background-color: #e1f5fe;
     color: #000000;
     align-self: flex-start;
+    border-radius: 20px 20px 20px 0px;
 }
 
 .input-container {

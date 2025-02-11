@@ -4,7 +4,9 @@ import './Chat.css'
 
 
 const Chat = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { role: 'system', content: 'You are a helpful assistant.' }, 
+  ]);
   const [inputValue, setInputValue] = useState('');
 
    
@@ -15,30 +17,30 @@ const Chat = () => {
 
   const handleSend = async () => {
      if (inputValue.trim()) {
-      // Add the user's message to the list
-      setMessages([...messages, { text: inputValue, sender: 'user' }]);
+      const userMessage = { role: 'user', content: inputValue };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
 
       
       try {
+        
         const response = await openai.chat.completions.create({
           model: 'gpt-3.5-turbo', 
-          messages: [
-            {
-              role: 'user',
-              content: inputValue,
-            },
-          ],
+          messages: messages.concat(userMessage), 
         });
+
+
         const chatGPTResponse = response.choices[0].message.content;
+
+
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: chatGPTResponse, sender: 'chatgpt' },
+          { role: 'assistant', content: chatGPTResponse },
         ]);
       } catch (error) {
         console.error('Error calling ChatGPT API:', error);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: 'Sorry, something went wrong. Please try again.', sender: 'chatgpt' },
+          { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' },
         ]);
       }
 
@@ -55,12 +57,14 @@ const Chat = () => {
   return (
     <div className="chat-box">
       <div className="messages">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender === 'user' ? 'user-message' : 'chatgpt-message'}`}
-          >
-            {message.text}
+        {messages
+          .filter((msg) => msg.role !== 'system') 
+          .map((message, index) => (
+            <div
+              key={index}
+              className={`message ${message.role === 'user' ? 'user-message' : 'chatgpt-message'}`}
+            >
+            {message.content}
           </div>
         ))}
       </div>

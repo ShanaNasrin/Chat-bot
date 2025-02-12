@@ -41,7 +41,7 @@ body {
 .message {
     padding: 10px;
     max-width: 70%;
-    word-wrap: break-word;
+   
 }
 
 .user-message {
@@ -56,6 +56,13 @@ body {
     color: #000000;
     align-self: flex-start;
     border-radius: 20px 20px 20px 0px;
+}
+
+.product-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
 }
 
 .input-container {
@@ -95,12 +102,6 @@ body {
             background-color: #2684f0;
  }
 
- .responsive-image{
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 10px 0;
- }
 
 
 

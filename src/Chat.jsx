@@ -97,29 +97,28 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
       setMessages((prevMessages) => [...prevMessages, userMessage]);
 
       
-      try {
+    try {
+
+         let chatGPTResponse = '';
+         const locationKeywords = /(location|address)/i;
+
+        if (locationKeywords.test(inputValue)) {
+          chatGPTResponse = "Here is the location of our shop: https://maps.app.goo.gl/Fg6q87vZcpMDF5Tx8";
+        } else {
         
-        const response = await openai.chat.completions.create({
-          model: 'gpt-3.5-turbo', 
-          messages: messages.concat(userMessage), 
+          const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo', 
+            messages: messages.concat(userMessage), 
         });
 
 
-        let chatGPTResponse = response.choices[0].message.content;
+         chatGPTResponse = response.choices[0].message.content;
 
         const imageKeywords = /(image|picture|photo)/i;
         if (imageKeywords.test(inputValue)) {
-          chatGPTResponse = (
-            <div>
-              <p>Image attached.:</p>
-              <img
-                src="https://picsum.photos/800/600" 
-                alt="Requested Image"
-                className="responsive-image" 
-               />
-            </div>
-          );
+          chatGPTResponse = "Image attached: https://picsum.photos/800/600";  
         }
+      }
 
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -153,16 +152,30 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     <div className="chat-box">
      <h1 className="chat-heading">Customer Support Assistant</h1>
       <div className="messages">
-        {messages
-          .filter((msg) => msg.role !== 'system') 
-          .map((message, index) => (
-            <div
-              key={index}
-              className={`message ${message.role === 'user' ? 'user-message' : 'chatgpt-message'}`}
-            >
-            {message.content}
+  {messages
+    .filter((msg) => msg.role !== 'system') 
+    .map((message, index) => (
+      <div
+        key={index}
+        className={`message ${message.role === 'user' ? 'user-message' : 'chatgpt-message'}`}
+      >
+        {message.content.includes("https://maps.app.goo.gl/") ? (
+          <div>
+            <p>Here is the location of our shop</p>
+            <a href={message.content.split(' ')[7]} target="_blank" rel="noopener noreferrer">
+              Click here to view the shop location on Google Maps
+            </a>
           </div>
-        ))}
+        ) : message.content.includes("https://picsum.photos/") ? (
+          <div>
+            <p>Image attached:</p>
+            <img src={message.content.split(' ')[2]} alt="Requested Image" className="responsive-image" />
+          </div>
+        ) : (
+          <p>{message.content}</p>
+        )}
+      </div>
+    ))}
         <div ref={messagesEndRef} />
       </div>
       <div className="input-container">

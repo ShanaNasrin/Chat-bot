@@ -9,8 +9,8 @@ body {
 }
 
 .chat-box {
-    width: 375px;
-    height: 667px;
+    height: 100vh;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     background-color: #fafafa;
@@ -58,12 +58,6 @@ body {
     border-radius: 20px 20px 20px 0px;
 }
 
-.product-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 10px 0;
-}
 
 .input-container {
     display: flex;

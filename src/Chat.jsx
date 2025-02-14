@@ -131,8 +131,6 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
       setMessages((prevMessages) => [...prevMessages, userMessage]);
 
       try {
-        
-
         const response = await openai.chat.completions.create({
           model: "gpt-3.5-turbo",
           messages: messages.concat(userMessage),
@@ -186,12 +184,12 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
             >
               <p>{message.content}</p>
 
-             {messages} 
+              
 
-              <img src="https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg" alt="image" />
-            
-            
-            
+              <img
+                src="https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg"
+                style={{ height: "100px", borderRadius: "9px" }}
+              />
             </div>
           ))}
         <div ref={messagesEndRef} />

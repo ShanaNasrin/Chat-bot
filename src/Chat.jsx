@@ -175,23 +175,30 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
       <div className="messages">
         {messages
           .filter((msg) => msg.role !== "system")
-          .map((message, index) => (
-            <div
-              key={index}
-              className={`message ${
-                message.role === "user" ? "user-message" : "chatgpt-message"
-              }`}
-            >
-              <p>{message.content}</p>
+          .map((message, index) => {
 
-              
 
-              <img
-                src="https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg"
-                style={{ height: "100px", borderRadius: "9px" }}
-              />
-            </div>
-          ))}
+            const hasLink = message.content.includes("https://");
+
+            return (
+              <div
+                key={index}
+                className={`message ${
+                  message.role === "user" ? "user-message" : "chatgpt-message"
+                }`}
+              >
+                <p>{message.content}</p>
+
+                {
+                    message.role === "assistant"  && hasLink === true ?
+                    <img
+                  src="https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg"
+                  style={{ height: "100px", borderRadius: "9px" }}
+                />:null
+                }
+              </div>
+            );
+          })}
         <div ref={messagesEndRef} />
       </div>
       <div className="input-container">

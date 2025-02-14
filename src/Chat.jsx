@@ -65,6 +65,8 @@ You are ESTi, the friendly customer service assistant for Estonia Garten Textile
 
 ## Available Products:
 
+while listing the products you must include image of the product
+
 ### Running Materials (Raw Fabrics)
 - Cotton: Prints, plain, textured patterns
 - Linen: Solid colors, textured weaves
@@ -157,6 +159,24 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     }
   };
 
+  function extractLink(str) {
+    const regex = /(https?:\/\/[^\s]+)/g;
+    const links = str.match(regex);
+
+    const filteredLinks = [];
+
+    if (links === null) {
+      return [];
+    }
+
+    for (let i = 0; i < links.length; i++) {
+      let fixedLink = links[i].replace(")", "");
+      filteredLinks.push(fixedLink);
+    }
+
+    return filteredLinks;
+  }
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSend();
@@ -176,9 +196,9 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
         {messages
           .filter((msg) => msg.role !== "system")
           .map((message, index) => {
-
-
             const hasLink = message.content.includes("https://");
+            let imageLinks = extractLink(message.content);
+            console.log(imageLinks);
 
             return (
               <div
@@ -189,13 +209,16 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
               >
                 <p>{message.content}</p>
 
-                {
-                    message.role === "assistant"  && hasLink === true ?
-                    <img
-                  src="https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg"
-                  style={{ height: "100px", borderRadius: "9px" }}
-                />:null
-                }
+                {message.role === "assistant" && hasLink === true
+                  ? imageLinks.map((imageLink, index) => (
+                      <img
+                        key={index}
+                        src={imageLink}
+                        alt="image"
+                        style={{ height: "100px", borderRadius: "9px" }}
+                      />
+                    ))
+                  : null}
               </div>
             );
           })}

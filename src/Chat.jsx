@@ -75,11 +75,38 @@ You are ESTi, the friendly customer service assistant for Estonia Garten Textile
 while listing the products you must include image of the product
 
  Running Materials (Raw Fabrics)
-- Cotton: Prints, plain, textured patterns
-- Linen: Solid colors, textured weaves
-- Silk: Solid and printed designs
-- Polyester: Solid, printed, textured options
-- Rayon, Chiffon, Velvet: Various textures, colors, and prints
+1. Cotton
+    - Image: ![Cotton Material](https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg)  
+    - Price per meter
+    - Available Colors
+2. Linen
+    - Image: ![Linen Material](https://cdn.pixabay.com/photo/2016/10/17/13/46/fabric-1747649_1280.jpg)  
+    - Price per meter
+    - Available Colors
+3. Silk
+    - Image: ![Silk Material](hhttps://cdn.pixabay.com/photo/2020/03/09/16/02/silk-4916174_1280.jpg)  
+    - Price per meter
+    - Available Colors
+4. Polyester
+    - Image: ![Polyester](https://cdn.pixabay.com/photo/2017/08/05/01/11/fabric-2581994_1280.jpg)  
+    - Price per meter
+    - Available Colors
+5. Rayon
+    - Image: ![Rayon](https://cdn.pixabay.com/photo/2016/11/14/17/56/textile-1824172_1280.jpg)  
+    - Price per meter
+    - Available Colors
+6. Chiffon
+    - Image: ![Chiffon](https://cdn.pixabay.com/photo/2015/10/16/09/41/the-substance-990769_1280.jpg)  
+    - Price per meter
+    - Available Colors
+7. Velvet
+    - Image: ![Velvet Material](https://cdn.pixabay.com/photo/2016/10/17/13/51/navy-blue-1747663_1280.jpg)  
+    - Price per meter
+    - Available Colors
+7. Denim
+    - Image: ![Denim Material](https://cdn.pixabay.com/photo/2019/10/01/10/43/jeans-4517866_1280.jpg)  
+    - Price per meter
+    - Available Colors    
 
  Stitched Materials (Ready-Made Garments & Products)
 - T-Shirts, Dresses, Jeans, Jackets, etc.: Cotton, Linen, Silk, Velvet, Polyester
@@ -89,33 +116,6 @@ while listing the products you must include image of the product
  Fabric Customization:
 - Printing and dyeing services available
 - Help customers select the fabric type based on project needs 
-
- Material Information:
-     Cotton
-    - Image: ![Cotton Material](https://cdn.pixabay.com/photo/2019/06/22/11/15/folded-4291376_1280.jpg)  
-    - Price per meter
-    - Available Colors
-
-     Linen
-    - Image: ![Linen Material](https://cdn.pixabay.com/photo/2016/10/17/13/46/fabric-1747649_1280.jpg)  
-    - Price per meter
-    - Available Colors
-
-     Silk
-    - Image: ![Silk Material](hhttps://cdn.pixabay.com/photo/2020/03/09/16/02/silk-4916174_1280.jpg)  
-    - Price per meter
-    - Available Colors
-
-     Chiffon
-    - Image: ![Chiffon](https://cdn.pixabay.com/photo/2015/10/16/09/41/the-substance-990769_1280.jpg)  
-    - Price per meter
-    - Available Colors
-
-     Velvet
-    - Image: ![Velvet Material](https://cdn.pixabay.com/photo/2016/10/17/13/51/navy-blue-1747663_1280.jpg)  
-    - Price per meter
-    - Available Colors
-
 
  Order Management:
 - For order inquiries: Ask the customer for their order ID and order date to provide updates.
@@ -221,19 +221,85 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
               >
                 <p>{message.content}</p>
 
-                {message.role === "assistant" && hasLink === true
-                  ? imageLinks.map((imageLink, index) => (
-                     <div key={index}>
-                       <img
-                        key={index}
-                        src={imageLink}
-                        alt="image"
-                        style={{ height: "100px", borderRadius: "9px" }}
-                      />
-                      <p>{index + 1 }</p>
-                     </div>
+                {message.role === "assistant" &&
+                  hasLink === true &&
+                  (imageLinks.length <= 3 ? (
+                    //  If less than 3  images, display them normally (no grid)
+                    imageLinks.map((imageLink, idx) => (
+                      <div key={idx}>
+                        <img
+                          src={imageLink}
+                          alt="image"
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            borderRadius: "2px",
+                            // objectFit: "cover",
+                            // marginRight: "5px",
+                          }}
+                        />
+                      </div>
                     ))
-                  : null}
+                  ) : (
+                    //  If more than 3 images, display in a 2x2 grid
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: "5px",
+                        maxWidth: "310px",
+                      }}
+                    >
+                      {imageLinks.slice(0, 3).map((imageLink, idx) => (
+                        <img
+                          key={idx}
+                          src={imageLink}
+                          alt="image"
+                          style={{
+                            width: "150px",
+                            height: "150px",
+                            borderRadius: "2px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ))}
+
+                      {/* 4th image with +X overlay */}
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "150px",
+                          height: "150px",
+                          borderRadius: "2px",
+                          overflow: "hidden",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: `url(${imageLinks[3]}) center/cover no-repeat`,
+                          backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "rgba(0, 0, 0, 0.5)",
+                          }}
+                        ></div>
+                        <span
+                          style={{
+                            position: "absolute",
+                            color: "white",
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          +{imageLinks.length - 3}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
               </div>
             );
           })}

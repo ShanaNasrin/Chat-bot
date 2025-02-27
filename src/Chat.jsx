@@ -212,6 +212,25 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
             let imageLinks = extractLink(message.content);
             console.log(imageLinks);
 
+            // Convert URLs in text to clickable links
+            const renderMessageWithLinks = (text) => {
+              return text.split(/(https?:\/\/[^\s]+)/g).map((part, index) =>
+                part.match(/https?:\/\/[^\s]+/) ? (
+                  <a
+                    key={index}
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#007bff", textDecoration: "underline" }}
+                  >
+                    {part}
+                  </a>
+                ) : (
+                  part
+                )
+              );
+            };
+
             return (
               <div
                 key={index}
@@ -219,7 +238,7 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                   message.role === "user" ? "user-message" : "chatgpt-message"
                 }`}
               >
-                <p>{message.content}</p>
+                <p>{renderMessageWithLinks(message.content)}</p>
 
                 {message.role === "assistant" &&
                   hasLink === true &&

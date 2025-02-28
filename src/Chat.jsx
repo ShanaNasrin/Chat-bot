@@ -131,7 +131,8 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     },
   ]);
   const [inputValue, setInputValue] = useState("");
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
   const messagesEndRef = useRef(null);
 
   const openai = new OpenAI({
@@ -143,6 +144,8 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     if (inputValue.trim()) {
       const userMessage = { role: "user", content: inputValue };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+   
 
       try {
         const response = await openai.chat.completions.create({
@@ -244,8 +247,8 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                   hasLink === true &&
                   (imageLinks.length <= 3 ? (
                     //  If less than 3  images, display them normally (no grid)
-                    imageLinks.map((imageLink, idx) => (
-                      <div key={idx}>
+                    imageLinks.map((imageLink, index) => (
+                      <div key={index}>
                         <img
                           src={imageLink}
                           alt="image"
@@ -269,9 +272,9 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                         maxWidth: "310px",
                       }}
                     >
-                      {imageLinks.slice(0, 3).map((imageLink, idx) => (
+                      {imageLinks.slice(0, 3).map((imageLink, index) => (
                         <img
-                          key={idx}
+                          key={index}
                           src={imageLink}
                           alt="image"
                           style={{
@@ -279,6 +282,10 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                             height: "150px",
                             borderRadius: "2px",
                             objectFit: "cover",
+                          }}
+                          onClick={() => {
+                            setSelectedImages(imageLinks);
+                            setModalOpen(true);
                           }}
                         />
                       ))}
@@ -305,6 +312,10 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                             height: "100%",
                             backgroundColor: "rgba(0, 0, 0, 0.5)",
                           }}
+                          onClick={() => {
+                            setSelectedImages(imageLinks);
+                            setModalOpen(true);
+                          }}
                         ></div>
                         <span
                           style={{
@@ -313,6 +324,7 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                             fontSize: "20px",
                             fontWeight: "bold",
                           }}
+                          
                         >
                           +{imageLinks.length - 3}
                         </span>
@@ -334,8 +346,47 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
         />
         <button onClick={handleSend}>Send</button>
       </div>
+
+      {/* Image Modal */}
+      {modalOpen && (
+        <div className="modal-overlay" onClick={() => setModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-modal" onClick={() => setModalOpen(false)}>
+              &times;
+            </span>
+            <div
+              className="image-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+                gap: "10px",
+                padding: "10px",
+              }}
+            >
+              {selectedImages.map((image, idx) => (
+                <img
+                  key={idx}
+                  src={image}
+                  alt="Full View"
+                  style={{
+                    width: "100%",
+                    maxHeight: "300px",
+                    objectFit: "cover",
+                    borderRadius: "5px",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+
+
+
+
 
 export default Chat;

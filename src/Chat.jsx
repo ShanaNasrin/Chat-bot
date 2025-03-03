@@ -342,7 +342,7 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type message here..."
+          placeholder="Type here..."
         />
         <button onClick={handleSend}>Send</button>
       </div>
@@ -363,9 +363,9 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                 padding: "10px",
               }}
             >
-              {selectedImages.map((image, idx) => (
+              {selectedImages.map((image, index) => (
                 <img
-                  key={idx}
+                  key={index}
                   src={image}
                   alt="Full View"
                   style={{

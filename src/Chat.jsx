@@ -129,6 +129,11 @@ When user ask for the date, time, year, or month, provide the current date and t
 
 Remember: Keep interactions simple, friendly, and focused on helping customers find what they need.`,
     },
+    {
+      role: "assistant",
+      content:
+        "Welcome to Estonia Garten Textiles! 😊 I'm ESTi, your friendly customer support assistant. How can I help you today?",
+    },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -144,8 +149,6 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     if (inputValue.trim()) {
       const userMessage = { role: "user", content: inputValue };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
-
-   
 
       try {
         const response = await openai.chat.completions.create({
@@ -324,7 +327,6 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
                             fontSize: "20px",
                             fontWeight: "bold",
                           }}
-                          
                         >
                           +{imageLinks.length - 3}
                         </span>
@@ -383,10 +385,5 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
     </div>
   );
 };
-
-
-
-
-
 
 export default Chat;

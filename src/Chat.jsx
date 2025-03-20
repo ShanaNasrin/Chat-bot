@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { assets } from "./assets/assets";
 import { OpenAI } from "openai";
 import "./Chat.css";
 
@@ -346,7 +347,9 @@ Remember: Keep interactions simple, friendly, and focused on helping customers f
           onKeyDown={handleKeyDown}
           placeholder="Type here..."
         />
-        <button onClick={handleSend}>Send</button>
+        <button onClick={handleSend}>
+          <img src={assets.send_icon} alt="" />
+        </button>
       </div>
 
       {/* Image Modal */}
